@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <title>Lansia Punya Sahabat</title>
+    <style>
+      /* Reset styling untuk memastikan semua elemen dimulai dari kondisi yang sama
+         Box-sizing border-box membuat perhitungan ukuran elemen lebih mudah
+         karena padding dan border akan dihitung di dalam width/height total */
+      * {
+        box-sizing: border-box;
+      }
+      
+      /* Styling dasar untuk seluruh halaman
+         - Menghilangkan margin dan padding default browser
+         - Menggunakan font Segoe UI yang modern dan mudah dibaca
+         - Line-height 1.6 memberikan jarak baca yang nyaman
+         - Warna teks abu-abu gelap (#333) yang tidak terlalu kontras */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      
+      /* Tabel utama yang menjadi kerangka seluruh halaman
+         - Menggunakan lebar penuh (100%) untuk responsive
+         - Border-collapse menggabungkan border antar sel menjadi satu
+         - Box-shadow memberikan efek bayangan halus untuk kesan depth */
+      .main-table {
+        width: 100%;
+        border: none;
+        border-collapse: collapse;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      }
+      
+      /* Styling untuk semua sel dalam tabel utama
+         - Padding 20px memberikan ruang napas yang cukup
+         - Vertical-align top membuat konten dimulai dari atas sel
+         - Border none menghilangkan garis pembatas antar sel */
+      .main-table td {
+        padding: 20px;
+        border: none;
+        vertical-align: top;
+      }
+      
+      /* Styling untuk baris header utama dengan gradient biru yang menarik
+         - Linear gradient dari biru tua ke biru muda menciptakan efek profesional
+         - Text-align center membuat semua teks di tengah
+         - Position relative memungkinkan penambahan elemen dekoratif
+         - Overflow hidden mencegah elemen dekoratif keluar dari area header */
+      .header-row {
+        background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Container untuk mengatur posisi elemen dalam header
+         - Flexbox untuk mudah mengatur alignment dan justifikasi
+         - Align-items dan justify-content center membuat konten tepat di tengah
+         - Height 100% memastikan container mengisi tinggi penuh header */
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+      
+      /* Styling khusus untuk sel dalam baris header
+         - Important digunakan untuk override styling default tabel
+         - Padding 40px vertikal memberikan ruang yang lega
+         - Width 100% dan vertical-align middle untuk posisi ideal */
+      .header-row td {
+        text-align: center !important;
+        padding: 40px 20px !important;
+        width: 100%;
+        vertical-align: middle;
+      }
+      
+      /* Elemen dekoratif menggunakan pseudo-element untuk tekstur halus
+         - Position absolute memungkinkan overlay di atas background
+         - SVG pattern memberikan efek grain/tekstur halus
+         - Pointer-events none membuat elemen ini tidak menghalangi interaksi */
+      .header-row::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
+        pointer-events: none;
+      }
+      
+      /* Judul utama dengan styling yang elegan dan mudah dibaca
+         - Font-size 2.5em memberikan ukuran yang mencolok tapi tidak berlebihan
+         - Font-weight 300 memberikan kesan modern dan ringan
+         - Text-shadow memberikan efek depth dan kontras
+         - Z-index 1 memastikan teks berada di atas elemen dekoratif */
+      .header-title {
+        color: white;
+        font-size: 2.5em;
+        font-weight: 300;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin: 0;
+      }
+    
+      /* Teks marquee yang bergerak untuk menarik perhatian
+         - Font italic memberikan kesan dinamis dan menarik
+         - Z-index 1 memastikan teks terlihat di atas background
+         - Width 100% memastikan marquee menggunakan seluruh lebar container */
+      .header-marquee {
+        color: white;
+        margin: 0;
+        font-size: 1.1em;
+        font-style: italic;
+        /* opacity: 0.9; */
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        width: 100%;
+      }
+      
+      /* Styling untuk baris navigasi dengan gradient yang lebih terang
+         - Gradient dari biru sedang ke biru muda menciptakan transisi smooth dari header
+         - Text-align center membuat semua link navigasi berada di tengah
+         - Padding 0 menghilangkan padding default untuk kontrol penuh */
+      .nav-row {
+        background: linear-gradient(135deg, #578FCA 0%, #A1E3F9 100%);
+        text-align: center;
+        padding: 0;
+      }
+      
+      /* Padding khusus untuk sel navigasi
+         - 15px vertikal dan 20px horizontal memberikan ruang yang proporsional
+         - Berbeda dari padding umum tabel untuk penyesuaian visual */
+      .nav-row td {
+        padding: 15px 20px;
+      }
+      
+      /* Styling untuk link navigasi yang interaktif dan menarik
+         - Warna putih untuk kontras dengan background biru
+         - Padding dan margin memberikan area klik yang nyaman
+         - Border-radius 25px menciptakan bentuk pill yang modern
+         - Transition smooth membuat perubahan terasa halus
+         - Display inline-block memungkinkan transform dan ukuran custom */
+      .nav-row a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        display: inline-block;
+      }
+      
+      /* Efek hover yang menarik untuk link navigasi
+         - Background semi-transparan memberikan feedback visual
+         - Transform translateY mengangkat link sedikit ke atas
+         - Box-shadow memberikan efek kedalaman saat di-hover */
+      .nav-row a:hover {
+        background-color: rgba(255,255,255,0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      
+      /* Styling untuk sidebar dengan gradient yang menenangkan
+         - Width 25% memberikan proporsi yang seimbang dalam layout 3 kolom
+         - Gradient vertikal dari biru muda ke hijau muda menciptakan kesan segar
+         - Margin 10px memberikan jarak antar kolom
+         - Box-shadow memberikan efek mengambang yang elegan
+         - Position relative memungkinkan penambahan elemen dekoratif */
+      .sidebar {
+        width: 25%;
+        background: linear-gradient(180deg, #A1E3F9 0%, #D1F8EF 100%);
+        /* border-radius: 15px; */
+        margin: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        position: relative;
+      }
+      
+      /* Garis dekoratif di bagian atas sidebar menggunakan pseudo-element
+         - Height 4px memberikan aksen yang tidak terlalu mencolok
+         - Gradient horizontal memberikan variasi warna yang menarik
+         - Position absolute memungkinkan penempatan presisi di atas sidebar */
+      .sidebar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3674B5, #578FCA);
+        /* border-radius: 15px 15px 0 0; */
+      }
+      
+      /* Styling untuk heading dalam sidebar
+         - Warna biru tua memberikan kontras yang baik dengan background terang
+         - Font-size 1.4em cukup besar untuk menarik perhatian tapi tidak mendominasi
+         - Font-weight 600 memberikan penekanan yang tepat
+         - Text-align center membuat heading seimbang secara visual */
+      .sidebar h3 {
+        color: #2c5282;
+        margin: 20px 0 15px 0;
+        font-size: 1.4em;
+        font-weight: 600;
+        text-align: center;
+      }
+      
+      /* Styling untuk gambar dalam sidebar (foto testimoni, dll)
+         - Ukuran 80x80px memberikan proporsi yang pas untuk foto profil
+         - Border-radius 50% membuat foto menjadi lingkaran sempurna
+         - Box-shadow memberikan efek depth pada foto
+         - Transition untuk efek smooth saat di-hover */
+      .sidebar img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 10px 0;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+      }
+      
+      /* Efek hover untuk gambar sidebar
+         - Scale 1.05 memberikan efek zoom yang halus
+         - Membuat foto terasa interaktif dan hidup */
+      .sidebar img:hover {
+        transform: scale(1.05);
+      }
+      
+      /* Styling untuk teks kecil dalam sidebar (testimoni, caption)
+         - Display block memastikan teks berada di baris baru
+         - Font italic memberikan kesan kutipan atau testimoni
+         - Color abu-abu untuk hierarki visual yang jelas
+         - Padding horizontal memberikan ruang baca yang nyaman
+         - Line-height untuk keterbacaan optimal */
+      .sidebar small {
+        display: block;
+        margin-bottom: 20px;
+        font-style: italic;
+        color: #4a5568;
+        padding: 0 15px;
+        line-height: 1.4;
+      }
+      
+      /* Styling untuk daftar dalam sidebar (list fitur, keunggulan, dll)
+         - List-style none menghilangkan bullet point default
+         - Text-align left untuk keterbacaan optimal
+         - Padding horizontal memberikan ruang dari tepi sidebar */
+      .sidebar ul {
+        list-style: none;
+        text-align: left;
+        padding: 0 20px;
+        margin: 20px 0;
+      }
+      
+      /* Styling untuk item dalam daftar sidebar
+         - Margin-bottom memberikan jarak antar item yang nyaman
+         - Position relative memungkinkan penambahan custom bullet
+         - Padding-left memberikan ruang untuk custom bullet (checkmark)
+         - Color abu-abu untuk hierarki visual yang jelas */
+      .sidebar li {
+        margin-bottom: 12px;
+        position: relative;
+        padding-left: 25px;
+        color: #4a5568;
+      }
+      
+      /* Custom bullet menggunakan checkmark untuk memberikan kesan positif
+         - Content checkmark (✓) memberikan kesan bahwa semua poin adalah keunggulan
+         - Position absolute memungkinkan penempatan presisi
+         - Color biru untuk menarik perhatian dan konsistensi brand
+         - Font-weight dan size untuk visibilitas optimal */
+      .sidebar li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #3674B5;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+      
+      /* Styling untuk konten utama di tengah halaman
+         - Width 50% memberikan ruang yang cukup untuk konten tanpa terlalu lebar
+         - Gradient vertikal dari hijau muda ke putih menciptakan transisi yang lembut
+         - Margin dan box-shadow konsisten dengan sidebar untuk harmoni visual
+         - Position relative untuk elemen dekoratif */
+      .main-content {
+        width: 50%;
+        background: linear-gradient(180deg, #D1F8EF 0%, #ffffff 100%);
+        /* border-radius: 15px; */
+        margin: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        position: relative;
+      }
+      
+      /* Garis aksen di bagian atas konten utama
+         - Height 4px memberikan aksen yang konsisten dengan sidebar
+         - Warna biru solid untuk kesederhanaan dan fokus
+         - Position absolute untuk penempatan presisi */
+      .main-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #578FCA;
+        /* border-radius: 15px 15px 0 0; */
+      }
+      
+      /* Styling untuk heading utama dalam konten
+         - Font-size 2em cukup besar untuk menarik perhatian sebagai judul utama
+         - Color biru tua untuk konsistensi brand dan kontras yang baik
+         - Text-align center membuat judul seimbang secara visual
+         - Margin yang tepat untuk jarak dari elemen lain */
+      .main-content h1 {
+        color: #2c5282;
+        text-align: center;
+        margin: 20px 0 30px 0;
+        font-size: 2em;
+        font-weight: 600;
+      }
+      
+      /* Tabel khusus untuk menampilkan layanan-layanan yang tersedia
+         - Width 100% memastikan tabel menggunakan seluruh lebar container
+         - Border-collapse separate memungkinkan jarak antar sel
+         - Border-spacing 0 memberikan kontrol penuh atas jarak
+         - Margin vertical untuk jarak dari elemen sekitar */
+      .services-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 20px 0;
+      }
+      
+      /* Margin untuk baris tabel layanan
+         - Memberikan jarak antar baris layanan untuk visual yang tidak padat */
+      .services-table tr {
+        margin-bottom: 20px;
+      }
+      
+      /* Styling untuk sel dalam tabel layanan
+         - Background putih untuk kontras dengan container
+         - Border-radius memberikan sudut melengkung yang modern
+         - Margin memberikan jarak antar sel
+         - Box-shadow memberikan efek card yang mengambang
+         - Transition untuk efek hover yang smooth */
+      .services-table td {
+        border: none;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        margin: 5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      /* Efek hover untuk baris layanan
+         - Transform translateY mengangkat card sedikit ke atas
+         - Box-shadow yang lebih kuat memberikan efek depth yang lebih dramatis
+         - Membuat card terasa interaktif dan responsif */
+      .services-table tr:hover td {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      }
+      
+      /* Kolom untuk ikon layanan
+         - Width 25% memberikan proporsi yang seimbang dengan deskripsi
+         - Text-align center membuat ikon berada di tengah kolom
+         - Border-radius khusus untuk sisi kiri card */
+      .service-icon {
+        width: 25%;
+        text-align: center;
+        border-radius: 10px 0 0 10px;
+      }
+      
+      /* Styling untuk gambar ikon layanan
+         - Ukuran 80x80px memberikan ukuran yang ideal untuk ikon
+         - Border-radius 50% membuat ikon berbentuk lingkaran
+         - Box-shadow memberikan efek depth pada ikon */
+      .service-icon img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      }
+      
+      /* Kolom untuk deskripsi layanan
+         - Border-radius khusus untuk sisi kanan card
+         - Padding-left tambahan untuk jarak dari ikon */
+      .service-description {
+        border-radius: 0 10px 10px 0;
+        padding-left: 20px;
+      }
+      
+      /* Styling untuk nama/judul layanan
+         - Font-weight 600 memberikan penekanan pada nama layanan
+         - Color biru tua untuk konsistensi brand
+         - Font-size sedikit lebih besar dari teks biasa
+         - Display block membuat nama berada di baris terpisah
+         - Margin-bottom memberikan jarak dengan deskripsi */
+      .service-description b {
+        font-weight: 600;
+        color: #2c5282;
+        font-size: 1.1em;
+        display: block;
+        margin-bottom: 8px;
+      }
+      
+      /* Section untuk call-to-action (ajakan bertindak)
+         - Text-align center membuat semua elemen CTA berada di tengah
+         - Margin dan padding memberikan ruang yang cukup untuk menarik perhatian
+         - Area ini menjadi fokus utama untuk konversi user */
+      .cta-section {
+        text-align: center;
+        margin: 30px 0;
+        padding: 20px;
+      }
+      
+      /* Tombol call-to-action yang menarik dan profesional
+         - Gradient background memberikan efek premium dan menarik perhatian
+         - Padding yang besar membuat tombol mudah diklik dan terlihat penting
+         - Border-radius 30px memberikan bentuk pill yang modern
+         - Font styling dengan uppercase dan letter-spacing untuk kesan premium
+         - Box-shadow dengan warna brand untuk konsistensi visual
+         - Transition untuk efek hover yang smooth */
+      .cta-button {
+        background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(54, 116, 181, 0.3);
+      }
+      
+      /* Efek hover untuk tombol CTA yang dramatis dan menarik
+         - Transform translateY mengangkat tombol ke atas
+         - Box-shadow yang lebih kuat memberikan efek depth
+         - Gradient yang lebih gelap memberikan feedback visual
+         - Kombinasi efek ini membuat tombol terasa responsif dan premium */
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(54, 116, 181, 0.4);
+        background: linear-gradient(135deg, #2c5282 0%, #3674B5 100%);
+      }
+      
+      /* Teks syarat dan ketentuan yang kecil dan tidak mengganggu
+         - Font-size kecil karena informasi ini penting tapi tidak utama
+         - Color abu-abu untuk hierarki visual yang jelas
+         - Font italic untuk membedakan dari konten utama
+         - Margin-top untuk jarak dari tombol CTA */
+      .terms-text {
+        font-size: 12px;
+        color: #718096;
+        margin-top: 15px;
+        font-style: italic;
+      }
+      
+      /* Styling untuk baris footer dengan gradient yang elegan
+         - Gradient dari biru tua ke biru sedang memberikan kesan profesional
+         - Text-align center membuat konten footer berada di tengah
+         - Position relative untuk elemen dekoratif jika diperlukan */
+      .footer-row {
+        background: linear-gradient(135deg, #2c5282 0%, #3674B5 100%);
+        text-align: center;
+        position: relative;
+      }
+      
+      /* Teks footer yang sederhana dan elegan
+         - Warna putih untuk kontras dengan background gelap
+         - Margin 0 untuk alignment yang presisi
+         - Opacity sedikit transparan untuk kesan halus */
+      .footer-text {
+        color: white;
+        margin: 0;
+        font-size: 1em;
+        opacity: 0.9;
+      }
+      
+      /* Container untuk sertifikat dan logo kredibilitas
+         - Text-align center membuat semua logo tersusun rapi di tengah
+         - Margin untuk jarak dari elemen lain
+         - Padding untuk ruang internal yang nyaman
+         - Background semi-transparan memberikan area fokus untuk logo
+         - Border-radius untuk sudut yang lembut
+         - Box-shadow memberikan efek card yang halus */
+      .cert-container {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      /* Styling untuk logo sertifikat
+         - Height 60px memberikan ukuran yang cukup terlihat tapi tidak mendominasi
+         - Margin untuk jarak antar logo
+         - Border-radius untuk sudut yang lembut
+         - Transition untuk efek hover yang smooth
+         - Box-shadow memberikan efek depth pada setiap logo */
+      .cert-container img {
+        height: 60px;
+        margin: 5px 10px;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      /* Efek hover untuk logo sertifikat
+         - Scale 1.1 memberikan efek zoom yang menarik
+         - Membuat logo terasa interaktif dan menarik perhatian */
+      .cert-container img:hover {
+        transform: scale(1.1);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <!-- Header alternatif menggunakan div dengan background biru dan marquee
+         Ini adalah implementasi header yang lebih sederhana tanpa menggunakan tabel
+         Background biru konsisten dengan tema, padding untuk ruang yang nyaman
+         Marquee memberikan efek teks bergerak yang menarik perhatian pengunjung -->
+    <div style="background-color: #578FCA; padding: 20px; text-align: center;">
+      <!-- Judul utama website dengan styling inline untuk kemudahan -->
+      <h1 style="margin: 0; padding-bottom: 10px; color: white;">Lansia Punya Sahabat</h1>
+
+      <!-- Elemen marquee dengan pesan bergerak yang menjelaskan misi perusahaan
+           Scrollamount 3 memberikan kecepatan yang nyaman untuk dibaca
+           Display block memastikan marquee berada di baris terpisah -->
+      <marquee 
+        behavior="scroll" 
+        direction="left" 
+        scrollamount="3"
+        style="display: block; font-size: 1.1em; color: white; margin-top: 10px;">
+        Hadir menjadi teman setia untuk orang tua yang tersayang dan tercinta.
+      </marquee>
+    </div>
+
+
+    <!-- Tabel utama yang menjadi kerangka layout seluruh halaman
+         Menggunakan sistem tabel untuk layout yang stabil dan kompatibel -->
+    <table class="main-table">
+      <!-- Kode header alternatif yang di-comment
+           Ini adalah implementasi header menggunakan tabel yang bisa digunakan
+           sebagai alternatif dari header div di atas -->
+      <!-- <tr class="header-row">
+        <td colspan="3">
+          <div class="header-container">
+            <h1 class="header-title">Lansia Punya Sahabat</h1>
+          </div>
+        </td>
+      </tr>
+      <tr class="header-row">
+        <td colspan= "3" text-align: center; padding-top: 0;">
+          <marquee class="header-marquee" behavior="scroll" direction="left" scrollamount="3">
+            Hadir menjadi teman setia untuk orang tua yang tersayang dan tercinta.
+          </marquee>
+        </td>
+      </tr> -->
+
+      <!-- Baris navigasi yang mencakup seluruh lebar halaman
+           Colspan 3 membuat navigasi mengisi 3 kolom layout
+           Berisi link ke halaman-halaman utama website -->
+      <tr class="nav-row">
+        <td colspan="3">
+          <!-- Link navigasi dengan separator | untuk pemisah visual yang sederhana -->
+          <a href="index.html">Beranda</a> |
+          <a href="transaksi/daftar-layanan.html">Daftar Layanan</a> |
+          <a href="tentang.html">Tentang Perusahaan</a>
+        </td>
+      </tr>
+
+      <!-- Baris konten utama dengan layout 3 kolom -->
+      <!-- Baris konten utama dengan layout 3 kolom -->
+      <tr>
+        <!-- Kolom kiri: Sidebar untuk testimoni klien
+             Menampilkan feedback positif dari klien yang sudah menggunakan layanan
+             Memberikan kredibilitas dan membangun trust dengan calon klien -->
+        <td class="sidebar">
+          <h3>Testimoni Klien</h3>
+          
+          <!-- Testimoni pertama dengan container yang rapi dan visual yang menarik -->
+          <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <!-- Foto klien dengan alt text untuk accessibility -->
+            <img src="assets/siti.png" alt="Ibu Siti">
+            <!-- Kutipan testimoni dengan styling yang menunjukkan ini adalah quote -->
+            <small>"Melalui layanan kunjungan tempat tinggal, saya tidak merasa sendiri lagi dan relawan sangat baik."</small>
+            <!-- Nama klien dengan styling yang menarik untuk kredibilitas -->
+            <div style="font-weight: 600; color: #3674B5; margin-top: 5px;">- Ibu Siti</div>
+          </div>
+          
+          <!-- Testimoni kedua dengan format yang sama untuk konsistensi -->
+          <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <img src="assets/joko.png" alt="Pak Joko">
+            <small>"Setiap hari jadi bersemangat! Relawan sangat menemani saya, jadi tidak merasa sendiri."</small>
+            <div style="font-weight: 600; color: #3674B5; margin-top: 5px;">- Pak Joko</div>
+          </div>
+        </td>
+
+        <!-- Kolom tengah: Konten utama berisi informasi layanan -->
+        <td class="main-content">
+          <!-- Judul section yang menjelaskan isi konten -->
+          <h1>Layanan Kami</h1>
+          
+          <!-- Tabel khusus untuk menampilkan layanan dalam format yang rapi
+               Setiap baris berisi satu layanan dengan ikon dan deskripsi -->
+          <!-- Tabel khusus untuk menampilkan layanan dalam format yang rapi
+               Setiap baris berisi satu layanan dengan ikon dan deskripsi -->
+          <table class="services-table">
+            <!-- Layanan pertama: Telepon Harian -->
+            <tr>
+              <!-- Kolom ikon dengan gambar yang representatif -->
+              <td class="service-icon">
+                <img src="assets/telp.png" alt="Telepon Harian">
+              </td>
+              <!-- Kolom deskripsi dengan nama layanan dan penjelasan detail -->
+              <td class="service-description">
+                <b>Telepon Harian</b><br>
+                Teman ngobrol via telepon setiap hari untuk menemani orang tua
+                tersayang dan tercinta.
+              </td>
+            </tr>
+            
+            <!-- Layanan kedua: Kunjungan Tempat Tinggal -->
+            <tr>
+              <td class="service-icon">
+                <img src="assets/knock.jpg" alt="Kunjungan Rumah">
+              </td>
+              <td class="service-description">
+                <b>Kunjungan Tempat Tinggal</b><br>
+                Relawan datang menemani dan menghibur secara langsung di tempat
+                tinggal orang tua tersayang dan tercinta.
+              </td>
+            </tr>
+            
+            <!-- Layanan ketiga: Teman Jalan Pagi -->
+            <tr>
+              <td class="service-icon">
+                <img src="assets/walk.png" alt="Jalan Pagi">
+              </td>
+              <td class="service-description">
+                <b>Teman Jalan Pagi</b><br>
+                Menemani lansia jalan pagi atau olahraga ringan agar tetap
+                sehat.
+              </td>
+            </tr>
+          </table><br>
+
+          <!-- Section call-to-action untuk mengajak pengunjung mendaftar -->
+          <div class="cta-section">
+            <!-- Link yang membungkus tombol untuk navigasi ke halaman pendaftaran -->
+            <a href="transaksi/daftar-layanan.html">
+              <!-- Tombol utama dengan styling yang menarik perhatian -->
+              <button class="cta-button">
+                Daftar Sekarang
+              </button>
+            </a>
+            <br><br>
+            <!-- Disclaimer kecil tentang syarat dan ketentuan -->
+            <small class="terms-text">* Syarat dan ketentuan berlaku</small>
+          </div>
+        </td>
+
+        <!-- Kolom kanan: Sidebar untuk informasi cepat dan kredibilitas -->
+        <td class="sidebar">
+          <h3>Info Cepat</h3>
+          
+          <!-- Daftar keunggulan dan fitur layanan menggunakan custom bullet checkmark
+               Setiap poin dirancang untuk meyakinkan calon klien tentang kualitas layanan -->
+          <ul>
+            <li>Gratis pada pertemuan pertama</li>
+            <li>Relawan tersertifikasi</li>
+            <li>Bisa pilih caregiver sesuai karakteristik orang tua</li>
+            <li>Layanan 24 jam atau sesuai kebutuhan</li>
+            <li>Pengalaman merawat lansia & disabilitas</li>
+            <li>Perawatan di rumah dengan pendekatan humanis</li>
+            <li>Terlatih tangani kebutuhan medis ringan</li>
+            <li>Laporan harian aktivitas klien</li>
+          </ul>
+          
+          <!-- Container untuk menampilkan sertifikat resmi dan logo kredibilitas
+               Memberikan kepercayaan kepada calon klien tentang legalitas dan kualitas -->
+          <div class="cert-container">
+            <!-- Heading untuk section sertifikat -->
+            <h4 style="color: #2c5282; margin: 10px 0; font-size: 1em;">Tersertifikasi Resmi</h4>
+            <!-- Logo BNSP dengan title untuk informasi tambahan saat di-hover -->
+            <img src="assets/bnsp.png" alt="Tervirifikasi BNSP" title="Badan Nasional Sertifikasi Profesi">
+            <!-- Logo LSP dengan title untuk informasi tambahan -->
+            <img src="assets/LSP.png" alt="Tervirifikasi LSP" title="Lembaga Sertifikasi Profesi">
+          </div>
+        </td>
+      </tr>
+
+      <!-- Baris footer yang mencakup seluruh lebar halaman -->
+      <tr class="footer-row">
+        <!-- Footer dengan colspan 3 untuk mengisi seluruh lebar tabel -->
+        <td colspan="3">
+          <!-- Teks copyright dan tagline perusahaan -->
+          <p class="footer-text">&copy; 2025 Lansia Punya Sahabat — Dari Kami
+            Untuk Lansia</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

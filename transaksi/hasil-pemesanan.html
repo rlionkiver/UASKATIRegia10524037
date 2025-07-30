@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hasil Pemesanan - Lansia Punya Sahabat</title>
+  <style>
+    /* Pengaturan dasar dan reset style */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #D1F8EF 0%, #A1E3F9 100%);
+      min-height: 100vh;
+    }
+    
+    /* Styling untuk bagian header */
+    .header {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+    
+    .header h1 {
+      color: white;
+      font-size: 2.2em;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin: 0 0 10px 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header p {
+      color: white;
+      font-size: 1.1em;
+      font-style: italic;
+      opacity: 0.9;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Kontainer utama halaman */
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    /* Styling untuk kotak invoice/struk pemesanan */
+    .invoice-container {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      position: relative;
+      margin-bottom: 30px;
+    }
+    
+    .invoice-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3674B5, #578FCA);
+      border-radius: 15px 15px 0 0;
+    }
+    
+    .invoice-header {
+      text-align: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .invoice-header h2 {
+      color: #2c5282;
+      font-size: 1.8em;
+      margin: 0 0 10px 0;
+    }
+    
+    .invoice-header .status {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    
+    .invoice-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .detail-section {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 4px solid #3674B5;
+    }
+    
+    .detail-section h3 {
+      color: #2c5282;
+      margin: 0 0 15px 0;
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    
+    .detail-item {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .detail-label {
+      font-weight: 500;
+      color: #4a5568;
+      flex: 1;
+    }
+    
+    .detail-value {
+      color: #2d3748;
+      font-weight: 600;
+      flex: 1;
+      text-align: right;
+    }
+    
+    .service-summary {
+      background: white;
+      border: 2px solid #3674B5;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .service-summary h3 {
+      color: #2c5282;
+      margin: 0 0 15px 0;
+      text-align: center;
+    }
+    
+    .service-item {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .next-steps {
+      background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      border-left: 4px solid #f6ad55;
+    }
+    
+    .next-steps h3 {
+      color: #744210;
+      margin: 0 0 15px 0;
+    }
+    
+    .next-steps ol {
+      color: #744210;
+      padding-left: 20px;
+    }
+    
+    .next-steps li {
+      margin-bottom: 8px;
+    }
+    
+    .action-buttons {
+      text-align: center;
+      margin: 30px 0;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(54, 116, 181, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(54, 116, 181, 0.4);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: #3674B5;
+      border: 2px solid #3674B5;
+    }
+    
+    .btn-secondary:hover {
+      background: #3674B5;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+    }
+    
+    .print-only {
+      display: none;
+    }
+    
+    /* Pengaturan khusus saat halaman dicetak */
+    @media print {
+      body {
+        background: white !important;
+      }
+      
+      .header, .action-buttons {
+        display: none !important;
+      }
+      
+      .print-only {
+        display: block !important;
+      }
+      
+      .invoice-container {
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 20px !important;
+      }
+    }
+    
+    /* Pengaturan responsif untuk layar kecil */
+    @media (max-width: 768px) {
+      .invoice-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Pemesanan Berhasil!</h1>
+    <p>Terima kasih telah mempercayakan perawatan lansia kepada kami</p>
+  </div>
+
+  <div class="container">
+    <div class="invoice-container">
+      <!-- Header khusus untuk versi cetak -->
+      <div class="print-only" style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #2c5282; margin: 0;">LANSIA PUNYA SAHABAT</h1>
+        <p style="margin: 5px 0; color: #4a5568;">Invoice Pemesanan Layanan</p>
+      </div>
+      
+      <div class="invoice-header">
+        <h2>Invoice Pemesanan</h2>
+        <div class="status">✓ PEMESANAN DITERIMA</div>
+        <p style="margin: 15px 0 0 0; color: #4a5568;">
+          Nomor Pemesanan: <strong id="nomorPemesanan">-</strong><br>
+          Tanggal: <strong id="tanggalPemesanan">-</strong>
+        </p>
+      </div>
+
+      <div class="invoice-details">
+        <div class="detail-section">
+          <h3>🏠 Data Pemesan</h3>
+          <div class="detail-item">
+            <span class="detail-label">Nama:</span>
+            <span class="detail-value" id="namaPemesan">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Kontak:</span>
+            <span class="detail-value" id="kontakPemesan">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Hubungan:</span>
+            <span class="detail-value" id="hubunganPemesan">-</span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>👴 Data Lansia</h3>
+          <div class="detail-item">
+            <span class="detail-label">Nama:</span>
+            <span class="detail-value" id="namaLansia">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Umur:</span>
+            <span class="detail-value" id="umurLansia">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Jenis Kelamin:</span>
+            <span class="detail-value" id="genderLansia">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Sifat:</span>
+            <span class="detail-value" id="sifatLansia">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-summary">
+        <h3>📋 Layanan yang Dipilih</h3>
+        <div id="layananTerpilih">
+          <!-- Daftar layanan akan diisi oleh JavaScript -->
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>👨‍⚕️ Preferensi Caregiver</h3>
+        <div class="detail-item">
+          <span class="detail-label">Gender:</span>
+          <span class="detail-value" id="genderCaregiver">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Pengalaman:</span>
+          <span class="detail-value" id="pengalamanCaregiver">-</span>
+        </div>
+      </div>
+
+      <div class="detail-section" id="informasiTambahan">
+        <h3>📝 Informasi Tambahan</h3>
+        <div class="detail-item">
+          <span class="detail-label">Penyakit:</span>
+          <span class="detail-value" id="penyakitLansia">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Hal Disukai:</span>
+          <span class="detail-value" id="sukaLansia">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Hal Tidak Disukai:</span>
+          <span class="detail-value" id="tidakSukaLansia">-</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Catatan:</span>
+          <span class="detail-value" id="catatanTambahan">-</span>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h3>🔔 Langkah Selanjutnya</h3>
+        <ol>
+          <li>Tim kami akan menghubungi Anda dalam 1x24 jam untuk konfirmasi</li>
+          <li>Konsultasi gratis mengenai kebutuhan spesifik lansia</li>
+          <li>Pemilihan caregiver yang sesuai dengan kriteria</li>
+          <li>Penjadwalan pertemuan pertama (GRATIS)</li>
+          <li>Mulai layanan setelah persetujuan</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button onclick="window.print()" class="btn btn-secondary">🖨️ Cetak Invoice</button>
+      <button onclick="downloadPDF()" class="btn btn-success">📄 Download PDF</button>
+      <a href="../index.html" class="btn btn-primary">🏠 Kembali ke Beranda</a>
+    </div>
+  </div>
+
+  <script>
+    // Ambil data pemesanan dari penyimpanan browser
+    const dataPemesanan = JSON.parse(localStorage.getItem('pemesananData') || '{}');
+    const nomorPemesanan = localStorage.getItem('nomorPemesanan') || 'LPS000001'; //ini untuk bagian kode pemesanan
+    const tanggalPemesanan = localStorage.getItem('tanggalPemesanan') || new Date().toLocaleString('id-ID'); //ini untuk waktu pemesanannya
+
+    // Tampilkan nomor dan tanggal pemesanan di halaman
+    document.getElementById('nomorPemesanan').textContent = nomorPemesanan;
+    document.getElementById('tanggalPemesanan').textContent = tanggalPemesanan;
+    
+    //BAGIAN INI AKAN DIISI DENGAN - TERLEBIH DAHULU JIKA TIDAK ADA ISINYA JANGAN MENGGUNAKAN KONDISI OR
+    // Isi informasi data pemesan ke dalam elemen HTML
+    document.getElementById('namaPemesan').textContent = dataPemesanan.nama_keluarga || '-';
+    document.getElementById('kontakPemesan').textContent = dataPemesanan.kontak_keluarga || '-';
+    document.getElementById('hubunganPemesan').textContent = dataPemesanan.hubungan || '-';
+    
+    // Isi informasi data lansia ke dalam elemen HTML
+    document.getElementById('namaLansia').textContent = dataPemesanan.nama_lansia || '-';
+    document.getElementById('umurLansia').textContent = dataPemesanan.umur_lansia ? dataPemesanan.umur_lansia + ' tahun' : '-';
+    document.getElementById('genderLansia').textContent = dataPemesanan.gender_lansia || '-';
+    document.getElementById('sifatLansia').textContent = dataPemesanan.sifat_lansia || '-';
+    
+    // Isi informasi preferensi caregiver
+    document.getElementById('genderCaregiver').textContent = dataPemesanan.gender_caregiver || '-';
+    document.getElementById('pengalamanCaregiver').textContent = 
+      dataPemesanan.pengalaman && dataPemesanan.pengalaman.length > 0 
+        ? dataPemesanan.pengalaman.join(', ') 
+        : 'Tidak ada preferensi khusus';
+    
+    // Isi informasi tambahan tentang lansia
+    document.getElementById('penyakitLansia').textContent = dataPemesanan.penyakit_lansia || 'Tidak ada';
+    document.getElementById('sukaLansia').textContent = dataPemesanan.suka_lansia || '-';
+    document.getElementById('tidakSukaLansia').textContent = dataPemesanan.tidak_suka_lansia || '-';
+    document.getElementById('catatanTambahan').textContent = dataPemesanan.catatan || 'Tidak ada catatan';
+    
+    // Buat daftar layanan yang dipilih pengguna
+    const kontainerLayanan = document.getElementById('layananTerpilih');
+    const daftarLayanan = {
+      'telepon': '📞 Telepon Harian',
+      'kunjungan': '🏠 Kunjungan Tempat Tinggal',
+      'jalan': '🚶 Teman Jalan Pagi'
+    };
+    
+    // Periksa apakah ada layanan yang dipilih
+    if (dataPemesanan.layanan && dataPemesanan.layanan.length > 0) {
+      // Tampilkan setiap layanan yang dipilih
+      dataPemesanan.layanan.forEach(layanan => { //ini menggunakan for Each (pengulangan) untuk menampilkan layanan yang dipilih
+        // Buat elemen untuk setiap layanan
+        const elemenLayanan = document.createElement('div'); //ini untuk membuat elemen div baru
+        elemenLayanan.className = 'service-item'; //ini untuk memberikan kelas pada elemen div baru
+        elemenLayanan.innerHTML = ` 
+          <span>${daftarLayanan[layanan] || layanan}</span> // ini untuk menampilkan nama layanan
+          <span>✓</span> //ini untuk menampilkan tanda centang sebagai indikator layanan yang dipilih
+        `;
+        kontainerLayanan.appendChild(elemenLayanan); //ini untuk menambahkan elemen layanan ke dalam kontainer layanan
+        //appendChild digunakan untuk menambahkan elemen baru ke dalam kontainer layanan
+      });
+    } else {
+      // Tampilkan pesan jika tidak ada layanan yang dipilih
+      kontainerLayanan.innerHTML = '<p style="text-align: center; color: #4a5568;">Tidak ada layanan yang dipilih</p>';
+    }
+
+    // Fungsi untuk mengunduh PDF (sementara belum tersedia)
+    function downloadPDF() {
+      alert('Fitur download PDF akan segera tersedia!\n\nSementara ini Anda dapat mencetak halaman ini sebagai PDF menggunakan browser.');
+    }
+
+    // Hapus data dari penyimpanan browser setelah 24 jam
+    setTimeout(() => {
+      localStorage.removeItem('pemesananData');
+      localStorage.removeItem('nomorPemesanan');
+      localStorage.removeItem('tanggalPemesanan');
+    }, 24 * 60 * 60 * 1000); // 24 jam dalam milidetik
+  </script>
+</body>
+</html>

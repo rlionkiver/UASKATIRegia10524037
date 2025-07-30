@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulir Pemesanan - Lansia Punya Sahabat</title>
+  <style>
+    /* Reset dan Base Styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #D1F8EF 0%, #A1E3F9 100%);
+      min-height: 100vh;
+    }
+    
+    /* Header Styles */
+    .header {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+    
+    .header h1 {
+      color: white;
+      font-size: 2.2em;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin: 0 0 10px 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header p {
+      color: white;
+      font-size: 1.1em;
+      font-style: italic;
+      opacity: 0.9;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    /* Form Styles */
+    .form-container {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3674B5, #578FCA);
+      border-radius: 15px 15px 0 0;
+    }
+    
+    .form-section {
+      margin-bottom: 35px;
+      padding: 25px;
+      background: linear-gradient(180deg, #f8fdff 0%, #ffffff 100%);
+      border-radius: 12px;
+      border-left: 4px solid #3674B5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .form-section h3 {
+      color: #2c5282;
+      margin: 0 0 20px 0;
+      font-size: 1.4em;
+      font-weight: 600;
+      border-bottom: 2px solid #A1E3F9;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #2c5282;
+      font-weight: 500;
+      font-size: 1em;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #3674B5;
+      box-shadow: 0 0 0 3px rgba(54, 116, 181, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    /* Radio and Checkbox Styles */
+    .radio-group, .checkbox-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    
+    .radio-option, .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+    
+    .radio-option:hover, .checkbox-option:hover {
+      background: rgba(54, 116, 181, 0.1);
+    }
+    
+    .radio-option input, .checkbox-option input {
+      width: auto;
+      margin: 0;
+    }
+    
+    /* Submit Button */
+    .submit-container {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid #e2e8f0;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(54, 116, 181, 0.3);
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(54, 116, 181, 0.4);
+      background: linear-gradient(135deg, #2c5282 0%, #3674B5 100%);
+    }
+    
+    /* Back Link */
+    .back-link {
+      display: inline-block;
+      margin: 20px 0;
+      color: #3674B5;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 10px 20px;
+      border: 2px solid #3674B5;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      background: #3674B5;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    /* Required field indicator */
+    .required {
+      color: #e53e3e;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Formulir Pemesanan Layanan</h1>
+    <p>Lengkapi data di bawah ini untuk mendapatkan layanan terbaik untuk lansia tercinta</p>
+  </div>
+
+  <div class="container">
+    <a href="../index.html" class="back-link">← Kembali ke Beranda</a>
+    <div class="form-container">
+      <form id="pemesananForm">
+        <div class="form-section">
+          <h3>Data Pemesan (Keluarga)</h3>
+          <div class="form-group">
+            <label for="nama_keluarga">Nama Lengkap <span class="required">*</span></label>
+            <input type="text" id="nama_keluarga" name="nama_keluarga" required>
+          </div>
+          <div class="form-group">
+            <label for="kontak_keluarga">No. HP / WhatsApp <span class="required">*</span></label>
+            <input type="tel" id="kontak_keluarga" name="kontak_keluarga" required>
+          </div>
+          <div class="form-group">
+            <label for="hubungan">Hubungan dengan lansia <span class="required">*</span></label>
+            <select id="hubungan" name="hubungan" required>
+              <option value="">Pilih hubungan</option>
+              <option value="anak">Anak</option>
+              <option value="cucu">Cucu</option>
+              <option value="keponakan">Keponakan</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Data Lansia</h3>
+          <div class="form-group">
+            <label for="nama_lansia">Nama Lengkap <span class="required">*</span></label>
+            <input type="text" id="nama_lansia" name="nama_lansia" required>
+          </div>
+          <div class="form-group">
+            <label for="umur_lansia">Umur <span class="required">*</span></label>
+            <input type="number" id="umur_lansia" name="umur_lansia" min="50" required>
+          </div>
+          <div class="form-group">
+            <label>Jenis Kelamin <span class="required">*</span></label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input type="radio" id="pria" name="gender_lansia" value="Pria" required>
+                <label for="pria">Pria</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="wanita" name="gender_lansia" value="Wanita" required>
+                <label for="wanita">Wanita</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sifat_lansia">Sifat Lansia</label>
+            <select id="sifat_lansia" name="sifat_lansia">
+              <option value="">Pilih sifat</option>
+              <option value="pendiam">Pendiam</option>
+              <option value="aktif">Aktif</option>
+              <option value="suka ngobrol">Suka Ngobrol</option>
+              <option value="sensitif">Sensitif</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="penyakit_lansia">Penyakit yang Diderita (jika ada)</label>
+            <textarea id="penyakit_lansia" name="penyakit_lansia" placeholder="Contoh: diabetes, tekanan darah tinggi, tidak ada"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="suka_lansia">Hal yang Disukai Lansia</label>
+            <textarea id="suka_lansia" name="suka_lansia" placeholder="Contoh: jalan pagi, ngobrol, musik dangdut"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="tidak_suka_lansia">Hal yang Tidak Disukai Lansia</label>
+            <textarea id="tidak_suka_lansia" name="tidak_suka_lansia" placeholder="Contoh: suara bising, terlalu banyak orang, makanan pedas"></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Layanan yang Dipilih <span class="required">*</span></h3>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="checkbox" id="telepon" name="layanan" value="telepon">
+              <label for="telepon">Telepon Harian</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="kunjungan" name="layanan" value="kunjungan">
+              <label for="kunjungan">Kunjungan Tempat Tinggal</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="jalan" name="layanan" value="jalan">
+              <label for="jalan">Teman Jalan Pagi</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Preferensi Caregiver</h3>
+          <div class="form-group">
+            <label for="gender_caregiver">Gender Caregiver</label>
+            <select id="gender_caregiver" name="gender_caregiver">
+              <option value="bebas">Bebas</option>
+              <option value="pria">Pria</option>
+              <option value="wanita">Wanita</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pengalaman tambahan</label>
+            <div class="checkbox-group">
+              <div class="checkbox-option">
+                <input type="checkbox" id="disabilitas" name="pengalaman" value="disabilitas">
+                <label for="disabilitas">Merawat disabilitas</label>
+              </div>
+              <div class="checkbox-option">
+                <input type="checkbox" id="medis" name="pengalaman" value="medis">
+                <label for="medis">Menangani kebutuhan medis</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Catatan Tambahan</h3>
+          <div class="form-group">
+            <label for="catatan">Catatan khusus atau preferensi waktu layanan</label>
+            <textarea id="catatan" name="catatan" placeholder="Tulis preferensi khusus, waktu layanan, dsb."></textarea>
+          </div>
+        </div>
+
+        <div class="submit-container">
+          <button type="submit" class="submit-btn">Kirim Pemesanan</button>
+          <p style="margin-top: 15px; font-size: 14px; color: #718096;">
+            <span class="required">*</span> Field wajib diisi
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* Event listener untuk form submission (pengiriman formulir)
+       - Menunggu sampai DOM selesai dimuat sebelum menjalankan script
+       - addEventListener mendengarkan event 'submit' pada form dengan ID 'pemesananForm'
+       - Ketika form di-submit (tombol diklik), fungsi callback akan dijalankan
+       - Parameter 'e' adalah event object yang berisi informasi tentang event yang terjadi */
+    document.getElementById('pemesananForm').addEventListener('submit', function(e) {
+      /* Mencegah form melakukan submission default ke server
+         - preventDefault() menghentikan perilaku default browser
+         - Tanpa ini, halaman akan reload atau redirect ke action URL
+         - lansia punya sahabat ingin menangani data secara manual dengan JavaScript */
+      e.preventDefault();
+      
+      /* Validasi khusus untuk memastikan minimal satu layanan dipilih
+         - querySelectorAll mencari semua checkbox dengan name="layanan" yang tercentang
+         - :checked adalah CSS selector untuk elemen yang ter-check
+         - Menggunakan const karena variable ini tidak akan diubah setelah inisialisasi */
+      const layananCheckboxes = document.querySelectorAll('input[name="layanan"]:checked');
+      
+      /* Pengecekan apakah user sudah memilih layanan
+         - length === 0 berarti tidak ada checkbox layanan yang dipilih
+         - alert() menampilkan pesan peringatan kepada user
+         - return menghentikan eksekusi fungsi jika validasi gagal */
+      if (layananCheckboxes.length === 0) {
+        alert('Harap pilih minimal satu layanan!');
+        return;
+      }
+      
+      /* Proses pengumpulan data dari formulir menggunakan FormData API
+         - FormData adalah Web API yang memudahkan pengumpulan data form
+         - 'this' merujuk pada form element (pemesananForm)
+         - FormData secara otomatis mengumpulkan semua input, select, textarea yang ada name-nya
+         - Hasilnya adalah object yang berisi key-value pairs dari form fields */
+      const formData = new FormData(this);
+      
+      /* Object untuk menyimpan data yang sudah diproses
+         - lansia punya sahabat perlu object biasa (bukan FormData) agar bisa disimpan ke localStorage
+         - Object ini akan diisi dengan data dari FormData dengan struktur yang lebih rapi */
+      const data = {};
+      
+      /* Iterasi melalui semua entries dalam FormData untuk memproses data
+         - formData.entries() mengembalikan iterator yang berisi [key, value] pairs
+         - Destructuring assignment [key, value] memisahkan key dan value dari setiap entry
+         - Loop ini memproses setiap field dalam form satu per satu */
+      for (let [key, value] of formData.entries()) {
+        /* Penanganan khusus untuk field yang bisa memiliki multiple values
+           - 'layanan' dan 'pengalaman' adalah checkbox groups yang bisa dipilih lebih dari satu
+           - Untuk field ini, lansia punya sahabat perlu menyimpan sebagai array, bukan string tunggal */
+        if (key === 'layanan' || key === 'pengalaman') {
+          /* Inisialisasi array jika belum ada
+             - Pengecekan !data[key] memastikan array dibuat hanya sekali
+             - Ini penting karena loop bisa menemukan multiple values untuk key yang sama */
+          if (!data[key]) data[key] = [];
+          /* Menambahkan value ke array yang sudah ada
+             - push() menambahkan elemen baru ke akhir array
+             - Ini memungkinkan lansia punya sahabat menyimpan multiple selections dari checkbox group */
+          data[key].push(value);
+        } else {
+          /* Untuk field biasa (text, select, radio), simpan langsung sebagai string
+             - Field seperti nama, umur, gender hanya memiliki satu value
+             - Disimpan sebagai key-value pair biasa dalam object */
+          data[key] = value;
+        }
+      }
+      
+      /* Menyimpan data pemesanan ke localStorage browser
+         - localStorage.setItem() menyimpan data secara persisten di browser
+         - JSON.stringify() mengubah object JavaScript menjadi string JSON
+         - Data akan tetap tersimpan meskipun browser ditutup atau halaman di-refresh
+         - Key 'pemesananData' digunakan untuk mengidentifikasi data ini */
+      localStorage.setItem('pemesananData', JSON.stringify(data));
+      
+      /* Generate dan simpan nomor pemesanan unik
+         - generateOrderNumber() adalah fungsi custom untuk membuat ID unik
+         - Nomor ini akan digunakan sebagai referensi untuk pelacakan pesanan
+         - Disimpan terpisah agar mudah diakses tanpa parsing JSON */
+      localStorage.setItem('nomorPemesanan', generateOrderNumber());
+      
+      /* Menyimpan timestamp saat pemesanan dibuat
+         - new Date() membuat object tanggal saat ini
+         - toLocaleString('id-ID') memformat tanggal sesuai format Indonesia
+         - Contoh hasil: "30/7/2025 pukul 14.30.15"
+         - Data ini akan ditampilkan di halaman konfirmasi */
+      localStorage.setItem('tanggalPemesanan', new Date().toLocaleString('id-ID'));
+      
+      /* Redirect user ke halaman hasil pemesanan
+         - window.location.href mengubah URL browser ke halaman baru
+         - File hasil-pemesanan.html akan membaca data dari localStorage
+         - Ini mensimulasikan proses "kirim ke server" tanpa backend */
+      window.location.href = 'hasil-pemesanan.html';
+    });
+    
+    /* Fungsi untuk generate nomor pemesanan yang unik dan mudah diingat
+       - Fungsi ini dipanggil setiap kali ada pemesanan baru
+       - Menghasilkan nomor dengan format: LPS + timestamp + random number
+       - Contoh hasil: LPS847291394 (LPS + 6 digit timestamp + 3 digit random) */
+    function generateOrderNumber() {
+      /* Prefix yang mengidentifikasi sistem
+         - 'LPS' singkatan dari "Lansia Punya Sahabat"
+         - Memudahkan identifikasi bahwa ini nomor pemesanan dari sistem lansia punya sahabat
+         - Bisa diubah sesuai kebutuhan branding */
+      const prefix = 'LPS';
+      
+      /* Mengambil 6 digit terakhir dari timestamp Unix
+         - Date.now() menghasilkan timestamp dalam milliseconds (contoh: 1722347291394)
+         - toString() mengubah number menjadi string
+         - slice(-6) mengambil 6 karakter terakhir untuk mempersingkat nomor
+         - Ini memberikan uniqueness berdasarkan waktu pembuatan */
+      const timestamp = Date.now().toString().slice(-6); //ini mungkin diluar dari materi, akan tetapi pada kasus saya sangat membantu untuk memberikan informasi ini
+      
+      /* Generate 3 digit random number untuk tambahan uniqueness
+         - Math.random() menghasilkan decimal 0-1 (contoh: 0.7834)
+         - Dikalikan 1000 untuk range 0-999.999
+         - Math.floor() membulatkan ke bawah menjadi integer
+         - padStart(3, '0') memastikan selalu 3 digit dengan leading zeros jika perlu
+         - Contoh: 78 menjadi "078", 5 menjadi "005" */
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      
+      /* Menggabungkan semua komponen menjadi nomor pemesanan final
+         - Format akhir: LPS + 6digit timestamp + 3digit random
+         - Contoh: LPS291394078
+         - Kombinasi timestamp + random memberikan probabilitas collision yang sangat rendah */
+      return prefix + timestamp + random;
+    }
+  </script>
+</body>
+</html>

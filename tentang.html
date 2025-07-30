@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Lansia Punya Sahabat</title>
+  <style>
+    /* Mengatur ulang semua elemen agar menggunakan box-sizing border-box
+       supaya padding dan border dihitung dalam ukuran total elemen */
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Pengaturan dasar untuk body halaman web
+       - Menghilangkan margin dan padding bawaan browser
+       - Menggunakan font yang bagus dan mudah dibaca
+       - Mengatur jarak antar baris agar nyaman dibaca */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    /* Styling untuk tabel utama yang menjadi kerangka layout halaman
+       - Lebar penuh layar (100%)
+       - Menghilangkan border bawaan tabel
+       - Menggabungkan border antar sel agar rapi
+       - Memberikan bayangan halus di sekitar tabel */
+    .main-table {
+      width: 100%;
+      border: none;
+      border-collapse: collapse;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Pengaturan untuk semua sel dalam tabel utama
+       - Memberikan padding yang cukup agar tidak sesak
+       - Menghilangkan border
+       - Membuat konten rata atas */
+    .main-table td {
+      padding: 20px;
+      border: none;
+      vertical-align: top;
+    }
+    
+    /* Styling untuk bagian header (yang sudah di-comment out dalam HTML)
+       - Background gradien biru yang menarik
+       - Teks di tengah
+       - Efek overlay dengan pattern */
+    .header-row {
+      background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Container untuk mengatur posisi elemen di header */
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    
+    /* Pengaturan khusus untuk sel header
+       - Memaksa teks di tengah dengan !important
+       - Padding yang disesuaikan
+       - Posisi vertikal di tengah */
+    .header-row td {
+      text-align: center !important;
+      padding: 20px !important;
+      width: 100%;
+      vertical-align: middle;
+    }
+    
+    /* Efek pattern halus di atas background header
+       menggunakan SVG pattern untuk memberikan tekstur subtle */
+    .header-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+    
+    /* Styling untuk judul utama di header
+       - Warna putih dengan bayangan untuk keterbacaan
+       - Font besar dan tipis (weight 300)
+       - Posisi relatif dengan z-index agar di atas pattern */
+    .header-title {
+      color: white;
+      font-size: 2.5em;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin: 0;
+    }
+  
+    /* Styling untuk teks marquee di header
+       - Warna putih dengan font italic
+       - Posisi relatif agar berada di atas pattern background */
+    .header-marquee {
+      color: white;
+      margin: 0;
+      font-size: 1.1em;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      width: 100%;
+    }
+    
+    /* Styling untuk baris navigasi/menu
+       - Background gradien biru ke biru muda
+       - Teks di tengah tanpa padding ekstra */
+    .nav-row {
+      background: linear-gradient(135deg, #578FCA 0%, #A1E3F9 100%);
+      text-align: center;
+      padding: 0;
+    }
+    
+    /* Pengaturan padding untuk sel navigasi */
+    .nav-row td {
+      padding: 15px 20px;
+    }
+    
+    /* Styling untuk link navigasi
+       - Warna putih tanpa underline
+       - Padding dan margin untuk ruang klik yang nyaman
+       - Border radius untuk tampilan tombol
+       - Transisi smooth untuk efek hover
+       - Font semi-bold dan display inline-block untuk kontrol ukuran */
+    .nav-row a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      display: inline-block;
+    }
+    
+    /* Efek hover untuk link navigasi
+       - Background semi-transparan saat di-hover
+       - Bergerak sedikit ke atas dengan transform
+       - Bayangan untuk efek depth */
+    .nav-row a:hover {
+      background-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    /* Styling untuk kolom sidebar (kiri dan kanan)
+       - Lebar 25% dari total lebar
+       - Background gradien dari biru muda ke hijau muda
+       - Margin untuk jarak dengan elemen lain
+       - Box shadow untuk efek kedalaman
+       - Position relative untuk pseudo-element */
+    .sidebar {
+      width: 25%;
+      background: linear-gradient(180deg, #A1E3F9 0%, #D1F8EF 100%);
+      margin: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    /* Garis aksen di bagian atas sidebar
+       menggunakan pseudo-element ::before untuk membuat garis gradien */
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3674B5, #578FCA);
+    }
+    
+    /* Styling untuk heading (h3) di sidebar
+       - Warna biru gelap yang konsisten dengan tema
+       - Margin yang pas untuk spacing
+       - Font size dan weight yang menarik
+       - Text di tengah untuk konsistensi */
+    .sidebar h3 {
+      color: #2c5282;
+      margin: 20px 0 15px 0;
+      font-size: 1.4em;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    /* Styling untuk gambar di sidebar (foto profil, dll)
+       - Ukuran 100x100 pixel yang cukup besar untuk detail
+       - Border radius 50% untuk membuat bentuk lingkaran
+       - Box shadow untuk efek kedalaman
+       - Transisi smooth untuk efek hover */
+    .sidebar img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 10px 0;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    /* Efek hover untuk gambar di sidebar
+       - Slightly scale up saat di-hover untuk interaktivitas */
+    .sidebar img:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Styling untuk daftar (ul) di sidebar
+       - Menghilangkan bullet points bawaan
+       - Text align left untuk readability
+       - Padding dan margin yang sesuai */
+    .sidebar ul {
+      list-style: none;
+      text-align: left;
+      padding: 0 20px;
+      margin: 20px 0;
+    }
+    
+    /* Styling untuk item list (li) di sidebar
+       - Margin bottom untuk jarak antar item
+       - Position relative untuk custom bullet
+       - Padding left untuk ruang custom bullet
+       - Warna teks yang soft tapi tetap readable */
+    .sidebar li {
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 25px;
+      color: #4a5568;
+    }
+    
+    /* Custom bullet point menggunakan checkmark
+       - Menggunakan pseudo-element ::before
+       - Positioned absolute untuk kontrol presisi
+       - Warna biru tema dan styling yang menarik */
+    .sidebar li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #3674B5;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    /* Styling untuk area konten utama di tengah
+       - Lebar 50% untuk memberikan ruang yang cukup
+       - Background gradien dari hijau muda ke putih
+       - Margin dan box shadow untuk konsistensi dengan sidebar
+       - Position relative untuk garis aksen di atas */
+    .main-content {
+      width: 50%;
+      background: linear-gradient(180deg, #D1F8EF 0%, #ffffff 100%);
+      margin: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    /* Garis aksen di bagian atas konten utama
+       - Sama seperti sidebar tapi dengan warna solid */
+    .main-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #578FCA;
+    }
+    
+    /* Styling untuk heading utama (h1) di konten
+       - Warna biru tema yang konsisten
+       - Center alignment untuk fokus
+       - Margin yang proporsional
+       - Font size dan weight yang hierarkis */
+    .main-content h1 {
+      color: #2c5282;
+      text-align: center;
+      margin: 20px 0 30px 0;
+      font-size: 2em;
+      font-weight: 600;
+    }
+    
+    /* Styling untuk sub-heading (h3) di konten
+       - Warna sama dengan h1 untuk konsistensi
+       - Margin yang memberikan breathing room
+       - Font size yang lebih kecil dari h1 tapi tetap prominent */
+    .main-content h3 {
+      color: #2c5282;
+      margin: 25px 0 15px 0;
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    
+    /* Styling untuk paragraf di konten utama
+       - Warna teks yang soft untuk easy reading
+       - Line height yang nyaman untuk membaca
+       - Margin untuk spacing antar paragraf
+       - Text justify untuk tampilan yang rapi */
+    .main-content p {
+      color: #4a5568;
+      line-height: 1.7;
+      margin: 15px 0;
+      text-align: justify;
+    }
+    
+    /* Styling untuk daftar (ul) di konten utama
+       - Warna teks yang konsisten dengan paragraf
+       - Padding left untuk indent yang pas */
+    .main-content ul {
+      color: #4a5568;
+      padding-left: 20px;
+    }
+    
+    /* Styling untuk item list di konten utama
+       - Margin bottom untuk spacing antar item
+       - Line height yang nyaman untuk readability */
+    .main-content li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    
+    /* Styling untuk baris footer di bagian bawah halaman
+       - Background gradien dari biru gelap ke biru sedang
+       - Text di tengah untuk konsistensi layout
+       - Position relative untuk efek tambahan jika diperlukan */
+    .footer-row {
+      background: linear-gradient(135deg, #2c5282 0%, #3674B5 100%);
+      text-align: center;
+      position: relative;
+    }
+    
+    /* Styling untuk teks di footer
+       - Warna putih untuk kontras dengan background gelap
+       - Margin 0 untuk menghindari spacing berlebih
+       - Font size standar
+       - Opacity sedikit transparan untuk efek subtle */
+    .footer-text {
+      color: white;
+      margin: 0;
+      font-size: 1em;
+      opacity: 0.9;
+    }
+    
+    /* Styling khusus untuk informasi kontak di sidebar
+       - Text center untuk consistency dengan design
+       - Margin yang sesuai untuk spacing
+       - Warna biru tema
+       - Font size sedikit lebih besar untuk readability */
+    .contact-info {
+      text-align: center;
+      margin: 15px 0;
+      color: #2c5282;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header utama halaman dengan background gradien biru
+       Berisi judul website dan marquee text yang bergerak -->
+  <div style="background: linear-gradient(135deg, #3674B5 0%, #578FCA 100%); padding: 20px; text-align: center;">
+    <h1 style="margin: 0; padding-bottom: 10px; color: white; font-size: 2.5em; font-weight: 300; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Lansia Punya Sahabat</h1>
+    <!-- Marquee text yang bergerak dari kanan ke kiri untuk menarik perhatian -->
+    <marquee 
+      behavior="scroll" 
+      direction="left" 
+      scrollamount="3"
+      style="display: block; font-size: 1.1em; color: white; margin-top: 10px; font-style: italic;">
+      Hadir menjadi teman setia untuk orang tua yang tersayang dan tercinta.
+    </marquee>
+  </div>
+
+  <!-- Tabel utama yang menjadi struktur layout halaman
+       Menggunakan sistem tabel untuk layout tiga kolom -->
+  <table class="main-table">
+    <!-- Baris navigasi/menu utama website
+         Menggunakan colspan="3" agar menu mengambil seluruh lebar tabel -->
+    <tr class="nav-row">
+      <td colspan="3">
+        <!-- Link navigasi dengan separator | untuk tampilan yang clean -->
+        <a href="index.html">Beranda</a> |
+        <a href="transaksi/daftar-layanan.html">Daftar Layanan</a> |
+        <a href="tentang.html">Tentang Perusahaan</a>
+      </td>
+    </tr>
+
+    <!-- Baris utama yang berisi tiga kolom: sidebar kiri, konten tengah, sidebar kanan -->
+    <tr>
+      <!-- Kolom sidebar kiri berisi nilai-nilai perusahaan dan kontak -->
+      <td class="sidebar">
+        <h3>Nilai Lansia Punya Sahabat</h3>
+        <!-- Daftar nilai-nilai perusahaan yang menggunakan custom checkmark bullet -->
+        <ul>
+          <li>Empati & Kasih Sayang</li>
+          <li>Profesionalisme</li>
+          <li>Kepercayaan</li>
+          <li>Pelayanan Berbasis Keluarga</li>
+          <li>Komitmen untuk Lansia</li>
+        </ul>
+        <h3>Kontak Lansia Punya Sahabat</h3>
+        <!-- Informasi kontak dengan emoji untuk visual appeal -->
+        <div class="contact-info">
+          📞 0812-3456-7890<br>
+          📧 BFF@lansia.co.id
+        </div>
+      </td>
+
+      <!-- Kolom konten utama berisi informasi lengkap tentang perusahaan -->
+      <td class="main-content">
+        <!-- Judul utama halaman tentang -->
+        <h1>Tentang Lansia Punya Sahabat</h1>
+        
+        <!-- Paragraf pembuka yang menjelaskan filosofi dan tujuan perusahaan -->
+        <p>
+          Lansia Punya Sahabat hadir sebagai layanan pendampingan dan perawatan lansia yang berfokus 
+          pada memberikan dukungan emosional dan fisik bagi orang tua tercinta. Saya percaya bahwa 
+          setiap lansia berhak mendapatkan perhatian penuh dan teman setia dalam menjalani hari-hari mereka.
+        </p>
+        
+        <!-- Paragraf kedua menjelaskan sejarah dan cakupan layanan -->
+        <p>
+          Berdiri sejak tahun 2025, Saya telah melayani kurang lebih 25 keluarga di seluruh Indonesia dengan 
+          menghadirkan relawan yang terlatih dan peduli. Layanan Saya meliputi telepon harian, kunjungan 
+          rumah, pendampingan aktivitas ringan, dan lainnya yang dirancang untuk meningkatkan kualitas hidup lansia.
+        </p>
+        
+        <!-- Bagian Visi perusahaan -->
+        <h3>Visi Lansia Punya Sahabat</h3>
+        <p>
+          Menjadi sahabat terpercaya bagi lansia Indonesia dengan pelayanan yang hangat, profesional, dan penuh perhatian.
+        </p>
+        
+        <!-- Bagian Misi perusahaan dalam bentuk daftar -->
+        <h3>Misi Lansia Punya Sahabat</h3>
+        <ul>
+          <li>Menyediakan layanan pendampingan lansia yang ramah dan terpercaya.</li>
+          <li>Membangun komunitas relawan yang berkomitmen dan berempati tinggi.</li>
+          <li>Meningkatkan kesejahteraan sosial dan emosional lansia melalui interaksi berkualitas.</li>
+          <li>Mendukung keluarga dalam memberikan perawatan terbaik bagi lansia tercinta.</li>
+        </ul>
+        
+        <!-- Informasi tentang tim perusahaan -->
+        <h3>Tim Lansia Punya Sahabat</h3>
+        <p>
+          Lansia Punya Sahabat terdiri dari relawan terlatih, tenaga profesional kesehatan, dan staf pendukung yang 
+          berdedikasi untuk memastikan setiap layanan berjalan dengan baik dan sesuai kebutuhan lansia.
+        </p>
+      </td>
+
+      <!-- Kolom sidebar kanan berisi informasi pendiri perusahaan -->
+      <td class="sidebar">
+        <h3>Pendiri Perusahaan</h3>
+        <!-- Section dengan foto dan data pendiri, menggunakan center tag untuk alignment -->
+        <center>
+          <!-- Foto pendiri dengan alt text untuk accessibility -->
+          <img src="assets/Regia.png" alt="Regia"><br><br>
+          <!-- Nama pendiri dengan styling inline untuk emphasis -->
+          <b style="color: #2c5282; font-size: 1.2em;">Regia Qolbu Rivita A.</b>
+          <!-- Informasi akademik pendiri -->
+          <p style="color: #4a5568; margin: 10px 0 5px 0;">NIM: 10524037</p>
+          <p style="color: #4a5568; margin: 5px 0;">Kelas: IS-1</p>
+        </center>
+      </td>
+    </tr>
+
+    <!-- Baris footer yang mencakup seluruh lebar tabel (3 kolom) -->
+    <tr class="footer-row">
+      <!-- Footer dengan colspan 3 agar mengisi seluruh lebar tabel -->
+      <td colspan="3">
+        <!-- Teks footer dengan copyright dan tagline perusahaan -->
+        <p class="footer-text">&copy; 2025 Lansia Punya Sahabat — Dari Saya Untuk Lansia</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
